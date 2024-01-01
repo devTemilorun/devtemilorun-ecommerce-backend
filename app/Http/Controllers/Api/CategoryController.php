@@ -8,18 +8,37 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::where('is_active', true)
-            ->orderBy('sort_order')
+        $categories = Category::withCount('products')
+            ->where('is_active', true)
+            ->orderBy('name')
             ->get();
-            
-        return response()->json($categories);
+
+        return response()->json([
+            'data' => $categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'slug' => $category->slug,
+                    'description' => $category->description,
+                    'products_count' => $category->products_count,
+                ];
+            }),
+            'success' => true
+        ]);
     }
-    
-    public function show($id)
+
+    public function show($slug)
     {
-        $category = Category::with('products')->findOrFail($id);
-        return response()->json($category);
+        $category = Category::with('products')
+            ->where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        return response()->json([
+            'data' => $category,
+            'success' => true
+        ]);
     }
 }

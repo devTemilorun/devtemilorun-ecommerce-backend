@@ -11,11 +11,8 @@ class UpdateProductSalesMetrics
         foreach ($event->order->items as $item) {
             $product = $item->product;
             
-            // Update sales count
             $product->increment('sales_count', $item->quantity);
             
-            // Update rating (you can implement average rating calculation here)
-            // $product->updateRating();
         }
     }
 }

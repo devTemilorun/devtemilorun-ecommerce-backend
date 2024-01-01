@@ -20,10 +20,6 @@ class WelcomeMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Welcome to Our Store!')
-                    ->markdown('emails.auth.welcome')
-                    ->with([
-                        'user' => $this->user,
-                    ]);
+        return $this->subject('Welcome to Our Store!')->markdown('emails.auth.welcome')->with(['user' => $this->user]);
     }
 }

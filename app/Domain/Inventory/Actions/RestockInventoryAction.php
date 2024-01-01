@@ -12,10 +12,8 @@ class RestockInventoryAction
     {
         $stockBefore = $product->stock;
         
-        // Add stock
         $product->increment('stock', $quantity);
         
-        // Create inventory log
         InventoryLog::create([
             'product_id' => $product->id,
             'order_id' => $order?->id,

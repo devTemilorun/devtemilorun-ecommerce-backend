@@ -22,7 +22,7 @@ class Product extends Model
         'compare_price' => 'decimal:2',
         'is_featured' => 'boolean',
         'rating' => 'decimal:2',
-        'images' => 'array'
+        'images'     => 'array', 
     ];
 
     public function category()

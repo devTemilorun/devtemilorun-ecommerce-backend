@@ -12,59 +12,7 @@ use App\Domain\Order\Events\PaymentFailed;
 
 class PaymentService
 {
-    public function __construct()
-    {
-        Stripe::setApiKey(config('stripe.secret_key'));
-    }
 
-    public function createPaymentIntent(Order $order)
-    {
-        $paymentIntent = PaymentIntent::create([
-            'amount' => (int) ($order->total * 100),
-            'currency' => 'usd',
-            'metadata' => [
-                'order_id' => $order->id,
-                'order_number' => $order->order_number,
-            ],
-        ]);
-
-        // Create payment
-        Payment::create([
-            'order_id' => $order->id,
-            'payment_intent_id' => $paymentIntent->id,
-            'amount' => $order->total,
-            'currency' => 'usd',
-            'status' => 'pending',
-            'payment_method_type' => 'card',
-        ]);
-
-        return $paymentIntent;
-    }
-
-    public function handleWebhook($payload, $sigHeader)
-    {
-        $event = Webhook::constructEvent(
-            $payload,
-            $sigHeader,
-            config('stripe.webhook_secret')
-        );
-
-        switch ($event->type) {
-            case 'payment_intent.succeeded':
-                $this->handlePaymentSuccess($event->data->object);
-                break;
-                
-            case 'payment_intent.payment_failed':
-                $this->handlePaymentFailure($event->data->object);
-                break;
-                
-            case 'charge.refunded':
-                $this->handleRefund($event->data->object);
-                break;
-        }
-
-        return $event;
-    }
 
     protected function handlePaymentSuccess($paymentIntent)
     {

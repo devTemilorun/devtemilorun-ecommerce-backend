@@ -10,7 +10,6 @@ class AdminCouponController extends Controller
 {
     public function index()
     {
-        // Return all coupons (you'll need to create a Coupon model)
         return response()->json([
             'data' => [],
             'message' => 'Coupons feature coming soon'

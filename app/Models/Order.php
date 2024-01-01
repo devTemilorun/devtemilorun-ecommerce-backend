@@ -26,6 +26,7 @@ class Order extends Model
         'shipped_at',
         'delivered_at',
         'notes',
+        'tracking_number', 
     ];
 
     protected $casts = [

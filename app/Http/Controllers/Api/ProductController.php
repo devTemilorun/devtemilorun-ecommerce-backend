@@ -77,17 +77,14 @@ class ProductController extends Controller
         $products = Product::where('is_featured', true)
             ->where('status', 'published')
             ->orderBy('created_at', 'desc')
-            ->limit(8)
             ->get();
-        
-        // If no featured products, get latest products
+
         if ($products->isEmpty()) {
             $products = Product::where('status', 'published')
                 ->orderBy('created_at', 'desc')
-                ->limit(8)
                 ->get();
         }
-        
+
         return response()->json([
             'data' => $products,
             'success' => true

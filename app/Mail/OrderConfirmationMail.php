@@ -20,12 +20,13 @@ class OrderConfirmationMail extends Mailable
 
     public function build()
     {
-        return $this->subject("Order Confirmation #{$this->order->order_number}")
+        return $this->subject("Order Confirmed #{$this->order->order_number}")
                     ->markdown('emails.orders.confirmation')
                     ->with([
-                        'order' => $this->order,
-                        'user' => $this->order->user,
-                        'items' => $this->order->items,
+                        'order'     => $this->order,
+                        'user'      => $this->order->user,
+                        'items'     => $this->order->items,
+                        'appName'   => config('app.name'),
                     ]);
     }
 }

@@ -14,7 +14,6 @@ class WebhookController extends Controller
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
 
-        // Process webhook asynchronously
         dispatch(new ProcessStripeWebhook($payload, $sigHeader));
 
         return response()->json(['received' => true], Response::HTTP_OK);

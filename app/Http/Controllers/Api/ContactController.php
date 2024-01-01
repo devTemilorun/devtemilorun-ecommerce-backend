@@ -29,7 +29,6 @@ class ContactController extends Controller
             ], 422);
         }
 
-        // Save to database
         $contactMessage = ContactMessage::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -74,7 +73,6 @@ class ContactController extends Controller
     {
         $message = ContactMessage::findOrFail($id);
         
-        // Only mark as read if it's unread
         if ($message->status === 'unread') {
             $message->markAsRead();
         }
@@ -112,7 +110,6 @@ class ContactController extends Controller
 
         $message = ContactMessage::findOrFail($id);
         
-        // Store the reply in database
         $message->update([
             'status' => 'replied',
             'replied_at' => now(),
@@ -120,9 +117,6 @@ class ContactController extends Controller
             'replied_by' => $request->user()?->id,
         ]);
         
-        // Here you would send an email to the user
-        // Mail::to($message->email)->send(new ContactReplyMail($message, $request->reply_message));
-
         return response()->json([
             'success' => true,
             'message' => 'Reply sent successfully',

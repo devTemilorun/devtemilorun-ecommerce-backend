@@ -11,11 +11,9 @@ class ClearProductCache
 {
     public function handle($event): void
     {
-        // Clear product list cache
         Cache::forget('featured_products');
         Cache::forget('products_list');
         
-        // If product has specific cache key, clear it
         if (isset($event->product)) {
             Cache::forget("product_{$event->product->id}");
         }

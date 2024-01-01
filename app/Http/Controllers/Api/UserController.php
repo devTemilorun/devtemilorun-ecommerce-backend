@@ -16,7 +16,6 @@ class UserController extends Controller
     {
         $user = $request->user();
         
-        // Get additional stats
         $totalOrders = Order::where('user_id', $user->id)->count();
         $totalSpent = Order::where('user_id', $user->id)
             ->where('status', 'paid')
@@ -51,7 +50,6 @@ class UserController extends Controller
             ], 422);
         }
         
-        // Update basic info
         if ($request->has('name')) {
             $user->name = $request->name;
         }
@@ -64,7 +62,6 @@ class UserController extends Controller
             $user->phone = $request->phone;
         }
         
-        // Update password if provided
         if ($request->has('new_password') && $request->new_password) {
             if (!Hash::check($request->current_password, $user->password)) {
                 return response()->json([
@@ -97,18 +94,14 @@ class UserController extends Controller
             ], 422);
         }
         
-        // Delete old avatar
         if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
             Storage::disk('public')->delete($user->avatar);
         }
         
-        // Store new avatar
         $path = $request->file('avatar')->store('avatars', 'public');
         
-        // Generate full URL
         $avatarUrl = asset('storage/' . $path);
         
-        // Update user
         $user->avatar = $avatarUrl;
         $user->save();
         

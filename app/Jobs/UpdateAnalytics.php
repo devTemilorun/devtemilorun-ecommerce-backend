@@ -16,7 +16,6 @@ class UpdateAnalytics implements ShouldQueue
 
     public function handle(AnalyticsService $analyticsService): void
     {
-        // Cache analytics data for faster access
         Cache::put('analytics_revenue', $analyticsService->getRevenueStats(), now()->addHours(6));
         Cache::put('analytics_top_products', $analyticsService->getTopProducts(), now()->addHours(6));
         Cache::put('analytics_customers', $analyticsService->getCustomerStats(), now()->addHours(6));

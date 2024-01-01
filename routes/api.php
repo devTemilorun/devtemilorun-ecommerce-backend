@@ -24,6 +24,9 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/auth/refresh', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
+Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
+Route::post('/auth/resend-verification', [AuthController::class, 'resendVerification']);
+Route::get('/auth/check', [AuthController::class, 'checkAuth']);
 
 // Products
 Route::get('/products', [ProductController::class, 'index']);
@@ -72,7 +75,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/products/{id}', [AdminProductController::class, 'show']);
     Route::put('/products/{id}', [AdminProductController::class, 'update']);
     Route::delete('/products/{id}', [AdminProductController::class, 'destroy']);
-    Route::post('/products/{id}/featured', [AdminProductController::class, 'toggleFeatured']);
+    Route::patch('/products/{id}/featured', [AdminProductController::class, 'toggleFeatured']);
+
     
     // Orders
     Route::get('/orders', [AdminOrderController::class, 'index']);

@@ -36,7 +36,6 @@ class AdminSystemController extends Controller
                 ];
             }
         } catch (\Exception $e) {
-            // No backups folder yet
         }
         
         return response()->json([

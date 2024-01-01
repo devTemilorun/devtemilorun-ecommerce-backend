@@ -52,6 +52,9 @@ return [
         'ses' => [
             'transport' => 'ses',
         ],
+        'resend' => [
+            'transport' => 'resend',
+        ],
 
         'postmark' => [
             'transport' => 'postmark',
@@ -61,9 +64,8 @@ return [
             // ],
         ],
 
-        'resend' => [
-            'transport' => 'resend',
-        ],
+        'admin_email' => env('ADMIN_EMAIL', 'admin@modernstore.com'),
+
 
         'sendmail' => [
             'transport' => 'sendmail',

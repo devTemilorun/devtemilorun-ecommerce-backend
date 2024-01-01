@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\AnalyticsService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class SetupAnalytics extends Command
 {
@@ -14,8 +15,7 @@ class SetupAnalytics extends Command
     {
         $this->info('Setting up analytics...');
         
-        // Create analytics tables if not exists
-        \DB::statement('
+        DB::statement('
             CREATE TABLE IF NOT EXISTS analytics_daily (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 date DATE NOT NULL,

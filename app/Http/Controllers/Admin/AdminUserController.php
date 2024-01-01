@@ -44,7 +44,6 @@ class AdminUserController extends Controller
     {
         $user = User::findOrFail($id);
         
-        // Don't allow deleting last admin
         if ($user->role === 'admin' && User::where('role', 'admin')->count() === 1) {
             return response()->json(['message' => 'Cannot delete the last admin user'], 400);
         }

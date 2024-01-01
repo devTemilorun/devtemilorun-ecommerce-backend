@@ -23,7 +23,6 @@ class UpdateOrderStatusAction
             return;
         }
         
-        // Handle cancellation - restore inventory
         if ($newStatus === 'cancelled' && $order->status === 'paid') {
             foreach ($order->items as $item) {
                 $this->restockInventory->execute(

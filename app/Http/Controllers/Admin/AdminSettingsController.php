@@ -18,7 +18,6 @@ class AdminSettingsController extends Controller
     
     public function update(Request $request)
     {
-        // Update settings logic here
         return response()->json(['message' => 'Settings updated']);
     }
     

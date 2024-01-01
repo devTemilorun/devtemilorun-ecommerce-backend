@@ -11,6 +11,7 @@
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
         "predis/predis": "^3.5",
+        "resend/resend-laravel": "^1.4",
         "spatie/laravel-medialibrary": "^11.23",
         "yabacon/paystack-php": "^2.2"
     },

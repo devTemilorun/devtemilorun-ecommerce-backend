@@ -16,7 +16,6 @@ class ProductRepository extends BaseRepository
     {
         $query = $this->model->query()->with('category');
         
-        //  filters
         if (!empty($filters['category'])) {
             $query->whereHas('category', function ($q) use ($filters) {
                 $q->where('slug', $filters['category']);
@@ -38,7 +37,6 @@ class ProductRepository extends BaseRepository
             });
         }
         
-        //  sorting
         if (!empty($filters['sort'])) {
             switch ($filters['sort']) {
                 case 'price_asc':
@@ -60,7 +58,6 @@ class ProductRepository extends BaseRepository
             $query->orderBy('created_at', 'desc');
         }
         
-        // Only show published products 
         if (!request()->user() || !request()->user()->isAdmin()) {
             $query->where('status', 'published');
         }

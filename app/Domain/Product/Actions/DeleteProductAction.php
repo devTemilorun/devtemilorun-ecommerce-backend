@@ -13,9 +13,7 @@ class DeleteProductAction
         DB::beginTransaction();
         
         try {
-            // Delete associated images
             foreach ($product->images as $image) {
-                // Delete from storage if needed
                 $image->delete();
             }
             

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -19,11 +20,13 @@ class User extends Authenticatable
         'avatar',
         'phone',
         'last_login_at',
+        'verification_token',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'verification_token', 
     ];
 
     protected $casts = [
@@ -44,5 +47,18 @@ class User extends Authenticatable
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function hasVerifiedEmail()
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+    public function markEmailAsVerified()
+    {
+        return $this->forceFill([
+            'email_verified_at' => Carbon::now(),
+            'verification_token' => null,
+        ])->save();
     }
 }

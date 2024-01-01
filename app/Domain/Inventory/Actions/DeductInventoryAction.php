@@ -12,10 +12,8 @@ class DeductInventoryAction
     {
         $stockBefore = $product->stock;
         
-        // Deduct stock
         $product->decrement('stock', $quantity);
         
-        // Create inventory log
         InventoryLog::create([
             'product_id' => $product->id,
             'order_id' => $order->id,
@@ -26,7 +24,6 @@ class DeductInventoryAction
             'reason' => "Order #{$order->order_number} placed",
         ]);
         
-        // Check for low stock alert
         if ($product->stock <= $product->low_stock_threshold) {
             event(new \App\Domain\Inventory\Events\LowStockAlert($product));
         }

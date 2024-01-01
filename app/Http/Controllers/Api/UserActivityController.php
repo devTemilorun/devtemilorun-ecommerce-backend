@@ -12,7 +12,6 @@ class UserActivityController extends Controller
     {
         $user = $request->user();
         
-        // Get recent orders
         $recentOrders = Order::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->limit(10)
@@ -33,7 +32,6 @@ class UserActivityController extends Controller
             ];
         }
         
-        // Add login activity if available
         if ($user->last_login_at) {
             $activities[] = [
                 'id' => 'login_' . time(),
@@ -44,7 +42,6 @@ class UserActivityController extends Controller
             ];
         }
         
-        // Sort by created_at descending
         $activities = collect($activities)
             ->sortByDesc('created_at')
             ->values()

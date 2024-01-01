@@ -13,17 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Register middleware aliases
         $middleware->alias([
             'admin' => AdminMiddleware::class,
         ]);
         
-        // Add Sanctum middleware to API group
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
         
-        // Disable CSRF for API routes
         $middleware->validateCsrfTokens(except: [
             'api/*',
             'sanctum/csrf-cookie',

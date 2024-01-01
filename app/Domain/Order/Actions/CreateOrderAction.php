@@ -15,17 +15,15 @@ class CreateOrderAction
         DB::beginTransaction();
         
         try {
-            // Generate order number
             $data['order_number'] = $this->generateOrderNumber();
             
-            // Calculate totals
             $subtotal = 0;
             foreach ($data['items'] as $item) {
                 $subtotal += $item['price'] * $item['quantity'];
             }
             
-            $tax = $subtotal * 0.1; // 10% tax
-            $shippingCost = $subtotal > 100 ? 0 : 10; // Free shipping over $100
+            $tax = $subtotal * 0.1; 
+            $shippingCost = $subtotal > 100 ? 0 : 10; 
             $total = $subtotal + $tax + $shippingCost;
             
             $data['subtotal'] = $subtotal;
@@ -33,7 +31,6 @@ class CreateOrderAction
             $data['shipping_cost'] = $shippingCost;
             $data['total'] = $total;
             
-            // Create order
             $order = Order::create([
                 'order_number' => $data['order_number'],
                 'user_id' => $data['user_id'],
@@ -46,7 +43,6 @@ class CreateOrderAction
                 'payment_method' => 'stripe',
             ]);
             
-            // Create order items
             foreach ($data['items'] as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -61,7 +57,6 @@ class CreateOrderAction
             
             DB::commit();
             
-            // Dispatch event
             event(new OrderCreated($order));
             
             return $order->load('items');

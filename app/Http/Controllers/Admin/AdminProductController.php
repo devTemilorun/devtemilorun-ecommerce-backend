@@ -59,10 +59,15 @@ class AdminProductController extends Controller
             'stock' => 'sometimes|integer|min:0',
             'category_id' => 'sometimes|exists:categories,id',
             'status' => 'sometimes|in:draft,published,archived',
+            'is_featured' => 'sometimes|boolean', 
         ]);
         
         if (isset($validated['name'])) {
             $validated['slug'] = Str::slug($validated['name']);
+        }
+        
+        if (isset($validated['is_featured']) && $validated['is_featured'] == true) {
+            $validated['status'] = 'published';
         }
         
         $product->update($validated);
@@ -79,11 +84,21 @@ class AdminProductController extends Controller
     }
     
     public function toggleFeatured($id)
-    {
-        $product = Product::findOrFail($id);
-        $product->is_featured = !$product->is_featured;
-        $product->save();
-        
-        return response()->json(['message' => 'Product featured status updated']);
+{
+    $product = Product::findOrFail($id);
+    
+    $product->is_featured = !$product->is_featured;
+    
+    if ($product->is_featured) {
+        $product->status = 'published';
     }
+    
+    $product->save();
+    
+    return response()->json([
+        'message' => 'Product featured status updated',
+        'is_featured' => $product->is_featured,
+        'status' => $product->status
+    ]);
+}
 }
