@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Request;
+use App\Http\Middleware\AdminMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,11 +12,23 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+    ->withMiddleware(function (Middleware $middleware) {
+        // Register middleware aliases
+        $middleware->alias([
+            'admin' => AdminMiddleware::class,
+        ]);
+        
+        // Add Sanctum middleware to API group
+        $middleware->api(prepend: [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
+        
+        // Disable CSRF for API routes
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+            'sanctum/csrf-cookie',
+        ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
-        );
+    ->withExceptions(function (Exceptions $exceptions) {
+        //
     })->create();

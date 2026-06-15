@@ -22,6 +22,12 @@ return [
         'key' => env('RESEND_API_KEY'),
     ],
 
+    'paystack' => [
+        'public_key' => env('PAYSTACK_PUBLIC_KEY'),
+        'secret_key' => env('PAYSTACK_SECRET_KEY'),
+        'callback_url' => env('PAYSTACK_CALLBACK_URL'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
