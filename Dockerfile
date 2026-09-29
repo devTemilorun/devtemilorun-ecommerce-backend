@@ -104,6 +104,7 @@ fi
 php artisan config:cache
 php artisan route:cache
 php artisan migrate --force --no-interaction
+php artisan db:seed --force --no-interaction
 
 chown -R www-data:www-data storage bootstrap/cache || true
 chmod -R 775 storage bootstrap/cache || true
