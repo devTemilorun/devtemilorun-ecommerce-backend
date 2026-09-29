@@ -101,6 +101,10 @@ if [ -z "${APP_KEY:-}" ] || [ "${APP_KEY:-}" = "base64:" ]; then
     php artisan key:generate --force --no-interaction || true
 fi
 
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+
 php artisan config:cache
 php artisan route:cache
 php artisan migrate --force --no-interaction
