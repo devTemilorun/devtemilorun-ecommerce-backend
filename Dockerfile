@@ -93,9 +93,7 @@ export PORT="${PORT:-8080}"
 
 cd /var/www/html
 
-if [ ! -f .env ] && [ -f .env.example ]; then
-    cp .env.example .env
-fi
+rm -f .env
 
 if [ -z "${APP_KEY:-}" ] || [ "${APP_KEY:-}" = "base64:" ]; then
     php artisan key:generate --force --no-interaction || true
