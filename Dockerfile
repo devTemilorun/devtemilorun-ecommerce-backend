@@ -99,6 +99,23 @@ cd /var/www/html
 # This creates .env from Railway/Docker environment variables
 # instead of trying to read a pre-existing .env file
 
+# Use Railway DATABASE_URL when available, and derive the classic DB_* values from it.
+if [ -n "${DATABASE_URL:-}" ]; then
+    DB_URL="${DATABASE_URL}"
+    DB_HOST="$(php -r '$u = parse_url(getenv("DATABASE_URL")); echo $u["host"] ?? "";' )"
+    DB_PORT="$(php -r '$u = parse_url(getenv("DATABASE_URL")); echo $u["port"] ?? "5432";' )"
+    DB_DATABASE="$(php -r '$u = parse_url(getenv("DATABASE_URL")); echo ltrim($u["path"] ?? "/", "/");' )"
+    DB_USERNAME="$(php -r '$u = parse_url(getenv("DATABASE_URL")); echo $u["user"] ?? "";' )"
+    DB_PASSWORD="$(php -r '$u = parse_url(getenv("DATABASE_URL")); echo $u["pass"] ?? "";' )"
+else
+    DB_URL="${DB_URL:-}"
+    DB_HOST="${DB_HOST:-}"
+    DB_PORT="${DB_PORT:-5432}"
+    DB_DATABASE="${DB_DATABASE:-}"
+    DB_USERNAME="${DB_USERNAME:-}"
+    DB_PASSWORD="${DB_PASSWORD:-}"
+fi
+
 cat > .env <<ENVEOF
 APP_NAME="${APP_NAME:-ModernStore}"
 APP_ENV="${APP_ENV:-production}"
@@ -120,11 +137,13 @@ LOG_CHANNEL="${LOG_CHANNEL:-stack}"
 LOG_STACK="${LOG_STACK:-single}"
 LOG_DEPRECATIONS_CHANNEL="${LOG_DEPRECATIONS_CHANNEL:-null}"
 LOG_LEVEL="${LOG_LEVEL:-debug}"
+DATABASE_URL="${DATABASE_URL:-${DB_URL:-}}"
+DB_URL="${DB_URL:-${DATABASE_URL:-}}"
 DB_CONNECTION="${DB_CONNECTION:-pgsql}"
-DB_HOST="${DB_HOST:-}"
+DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-5432}"
-DB_DATABASE="${DB_DATABASE:-}"
-DB_USERNAME="${DB_USERNAME:-}"
+DB_DATABASE="${DB_DATABASE:-laravel}"
+DB_USERNAME="${DB_USERNAME:-postgres}"
 DB_PASSWORD="${DB_PASSWORD:-}"
 DB_SSLMODE="${DB_SSLMODE:-require}"
 BROADCAST_CONNECTION="${BROADCAST_CONNECTION:-log}"
